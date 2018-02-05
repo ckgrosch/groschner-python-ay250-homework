@@ -1,0 +1,8 @@
+ipython
+jupyter
+pandas
+matplotlib
+numpy
+scipy
+seaborn
+scikit-image
