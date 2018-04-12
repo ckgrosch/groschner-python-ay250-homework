@@ -1,5 +1,7 @@
 language: python
 python:
   - "3.6"
+install:
+  - pip install -r hw_8/requirements.txt
 script:
   - pytest hw_8
