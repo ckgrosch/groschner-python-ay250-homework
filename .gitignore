@@ -1,3 +1,21 @@
+# Files you don't want in github
+groschner_hw_2/hw_2_data/master_df_bloom_figure.csv
+hw_1/Data/
+hw_3/email_example.py
+hw_3/homework_problem2.ipynb
+hw_3/my_credentials.py
+hw_3/my_credentials_for_spencer.py
+hw_3/sample_wave.py
+hw_3/sound_files/
+hw_5/Question_3_Exploration.ipynb
+hw_6/50_categories/
+hw_6/50_categoriesdf_full2.py
+hw_6/50_categoriestest_set.py
+hw_6/50_categoriestrain_set.py
+hw_6/Exploration_hw_6.ipynb
+hw_6/hw_6_groschner-Copy1.ipynb
+hw_6/validation_predictions.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
