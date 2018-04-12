@@ -4,4 +4,4 @@ python:
 install:
   - pip install -r hw_8/requirements.txt
 script:
-  - pytest hw_8
+  - pytest --cov-report html --cov-report term-missing --cov=./ hw_8
