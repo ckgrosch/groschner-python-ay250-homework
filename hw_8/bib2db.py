@@ -25,62 +25,20 @@ def author_list(file,citation_keys):
             authors.append("None")
     return authors
 
-def volume_list(file,citation_keys):
+def make_list(file,citation_keys, list_type):
     """Takes in the collection, called file, after the pybtex function parse_file has already been called on it
     and returns the volume numbers for that collection"""
     volumes = []
     for entry in citation_keys:
-        vol = file.entries[entry].fields.get('Volume',[])
+        vol = file.entries[entry].fields.get(list_type,[])
         if vol == []:
             vol = 'None'
+        if list_type == 'Title':
+            if vol != 'None':
+                vol = vol.replace('{','').replace('}','')
         volumes.append(vol)
     return volumes
 
-def title_list(file,citation_keys):
-    """Takes in the collection, called file, after the pybtex function parse_file has already been called on it
-    and returns the titles for that collection"""
-    volumes = []
-    for entry in citation_keys:
-        vol = file.entries[entry].fields.get('Title',[])
-        if vol == []:
-            vol = 'None'
-        else:
-            vol = vol.replace('{','').replace('}','')
-        volumes.append(vol)
-    return volumes
-
-def year_list(file,citation_keys):
-    """Takes in the collection, called file, after the pybtex function parse_file has already been called on it
-    and returns the years for that collection"""
-    volumes = []
-    for entry in citation_keys:
-        vol = file.entries[entry].fields.get('Year',[])
-        if vol == []:
-            vol = 'None'
-        volumes.append(vol)
-    return volumes
-
-def page_list(file,citation_keys):
-    """Takes in the collection, called file, after the pybtex function parse_file has already been called on it
-    and returns the pages for that collection"""
-    volumes = []
-    for entry in citation_keys:
-        vol = file.entries[entry].fields.get('Pages',[])
-        if vol == []:
-            vol = 'None'
-        volumes.append(vol)
-    return volumes
-
-def journal_list(file,citation_keys):
-    """Takes in the collection, called file, after the pybtex function parse_file has already been called on it
-    and returns the pages for that collection"""
-    volumes = []
-    for entry in citation_keys:
-        vol = file.entries[entry].fields.get('Journal',[])
-        if vol == []:
-            vol = 'None'
-        volumes.append(vol)
-    return volumes
 
 def bib_to_db(fname, collection_name, db_name,tbl_name):
     """Takes in a .bib file and returns a sql database with the citation tag, author list, volume, journal,pages, year
@@ -88,11 +46,11 @@ def bib_to_db(fname, collection_name, db_name,tbl_name):
     file = parse_file(fname)
     citation_keys = citation_key(file)
     authors = author_list(file,citation_keys)
-    volumes = volume_list(file,citation_keys)
-    journals = journal_list(file,citation_keys)
-    pages = page_list(file,citation_keys)
-    titles = title_list(file,citation_keys)
-    years = year_list(file,citation_keys)
+    volumes = make_list(file,citation_keys,'Volume')
+    journals = make_list(file,citation_keys, 'Journal')
+    pages = make_list(file,citation_keys, 'Pages')
+    titles = make_list(file,citation_keys, 'Title')
+    years = make_list(file,citation_keys, 'Year')
     clctn_list = [collection_name]*len(citation_keys)
     rows = list(zip(citation_keys,authors,journals,volumes,pages,years,titles,clctn_list))
     conn = sqlite3.connect(db_name)

@@ -55,21 +55,19 @@ def upload_file():
     print(request.files)
     if request.method == 'POST':
         # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
         file = request.files['file']
+        print(request.files)
+        if 'file' not in request.files:
+            return render_template('insert.html')
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
+            return render_template('insert.html')
         if file and allowed_file(file.filename):
             collection_name = request.form['collection_name']
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             fname = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            print('UPLOAD!!!!', fname, collection_name)
             bib_to_db(fname,collection_name,DB_NAME, TBL_NAME)
             return redirect(url_for('home_page'))
     return render_template('insert.html')
