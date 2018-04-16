@@ -6,8 +6,8 @@
 
     <body>
         <h1>Welcome to Bibtex Viewer!</h1>
-        <li> <a href="/insert"> Insert a Collection</a> </li>
-        <li> <a href="/search"> Run a Query</a> </li>
+        <p> <a href="/insert"> Insert a Collection</a> --
+        <a href="/search"> Run a Query</a> </p>
         <p> The current collections present are:
         {% for clct in collects_present %}
             <li>{{clct}}</li>

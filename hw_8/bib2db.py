@@ -82,7 +82,7 @@ def journal_list(file,citation_keys):
         volumes.append(vol)
     return volumes
 
-def bib_to_db(fname, collection_name, db_name):
+def bib_to_db(fname, collection_name, db_name,tbl_name):
     """Takes in a .bib file and returns a sql database with the citation tag, author list, volume, journal,pages, year
     and title"""
     file = parse_file(fname)
@@ -96,11 +96,7 @@ def bib_to_db(fname, collection_name, db_name):
     clctn_list = [collection_name]*len(citation_keys)
     rows = list(zip(citation_keys,authors,journals,volumes,pages,years,titles,clctn_list))
     conn = sqlite3.connect(db_name)
-    c = conn.cursor()
-    cmd1 = """DROP TABLE IF EXISTS {}""".format(collection_name)
-    c.execute(cmd1)
-    sql_cmd = """CREATE TABLE {} (id INTEGER PRIMARY KEY AUTOINCREMENT, citation_key TEXT, author_list TEXT, journal TEXT, volume TEXT, pages TEXT, year TEXT, title TEXT, collection TEXT)""".format(collection_name)
-    c.execute(sql_cmd)
-    c.executemany('insert into {} (citation_key,author_list,journal,volume,pages,year,title,collection) values (?,?,?,?,?,?,?,?)'.format(collection_name), rows)
+    cursor = conn.cursor()
+    cursor.executemany('insert into {} (cit_key,author_list,journal,volume,pages,year,title,collection) values (?,?,?,?,?,?,?,?)'.format(tbl_name), rows)
     conn.commit()
     conn.close()

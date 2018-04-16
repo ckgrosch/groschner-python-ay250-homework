@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <p> <a href="/"> Return to Homepage</a> </p>
+        <title>Bibtex Viewer</title>
+    </head>
+
+    <body>
+        <h1>Query a Collection</h1>
+        {% if collects_present == True %}
+            A directory is present. You can query it with the form below.
+            Use SQL query syntax to enter the query string that follows the "WHERE".
+            Column names are "cit_key", "author_list", "journal", "volume", "pages", "year", "title", and "collection".
+            To use wildcards, use "LIKE" and employ the "%" as a character wildcard and "_" (underscore) as
+            character wildcard.
+            <form method=post enctype=multipart/form-data>
+                <p>Query string: <input type=text name=query_str />
+                <input type=submit value=Query />
+                </p>
+            </form>
+        {% else %}
+            <p> Please upload a collection to query. </p>
+        {% endif %}
+        {% if results|length != 0 %}
+            {% for cite in results %}
+                {% autoescape false%}
+                    <li> {{cite}} </li>
+                {% endautoescape %}
+            {% endfor %}
+        {% else %}
+            <p> No results to display. </p>
+        {% endif %}
+    </body>
+</html>
