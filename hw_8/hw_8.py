@@ -20,7 +20,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = set(['bib'])
 DB_NAME = 'uploads/uploaded_citations.db'
 TBL_NAME = 'query_table'
+
 def clear_db():
+    """"This function clears the database on startup in order to make sure
+    tests of the website do not end up filling the database"""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cmd1 = """DROP TABLE IF EXISTS {}""".format(TBL_NAME)
@@ -35,6 +38,7 @@ clear_db()
 #function for homepage
 @app.route('/', methods=['GET'])
 def home_page():
+    """This function renders the homepage and lists the current collections held."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("SELECT DISTINCT collection FROM {} ".format(TBL_NAME))
@@ -46,12 +50,14 @@ def home_page():
 # All the functions for .bib file upload and file upload page
 def allowed_file(filename):
     """This function is called by upload file to make sure only
-     .bib files are uploaded"""
+     .bib files are uploaded."""
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/insert', methods=['GET', 'POST'])
 def upload_file():
+    """This function renders the insertion page and does the insertion of bib data
+    to the database."""
     print(request.files)
     if request.method == 'POST':
         # check if the post request has the file part
@@ -71,12 +77,12 @@ def upload_file():
             bib_to_db(fname,collection_name,DB_NAME, TBL_NAME)
             return redirect(url_for('home_page'))
     return render_template('insert.html')
-# @app.route('/insert', methods=['GET', 'POST'])
-# def insert_stuff():
-#     return render_template('base.html', page_title = "Insert Stuff", content = "MAKE BUTTS")
 
+#Function for querying
 @app.route('/search', methods=['GET', 'POST'])
 def search_stuff():
+    """"This function first queries the database and then taking the results from that
+    query parses them to be displayed on the /search page"""
     col_names = ['Citation Key','Author List','Journal','Volume','Pages','Year','Title','Collection']
     print(request.form)
     results = []
@@ -88,15 +94,11 @@ def search_stuff():
         collects_present = False
     else:
         collects_present = True
-        print(request.method)
         if request.method == 'POST':
-            print('POST')
             query_str = request.form['query_str']
             search = "SELECT * FROM {} WHERE ".format(TBL_NAME) + query_str + ';'
-            print(search)
             cursor.execute(search)
             query_out = cursor.fetchall()
-            print(query_out)
             citation = ""
             for cite in query_out:
                 for idx, item in enumerate(cite[1:]):
@@ -104,5 +106,4 @@ def search_stuff():
                 results.append(citation)
                 citation = ""
             return render_template('query.html', collects_present=collects_present, results = results)
-    print(collects_present)
     return render_template('query.html', collects_present=collects_present, results = results)

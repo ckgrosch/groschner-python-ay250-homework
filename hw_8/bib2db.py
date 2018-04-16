@@ -27,7 +27,8 @@ def author_list(file,citation_keys):
 
 def make_list(file,citation_keys, list_type):
     """Takes in the collection, called file, after the pybtex function parse_file has already been called on it
-    and returns the volume numbers for that collection"""
+    and returns the information for the given list_type ('Year', 'Journal', 'Pages', 'Volume',or 'Title')
+     for that collection"""
     volumes = []
     for entry in citation_keys:
         vol = file.entries[entry].fields.get(list_type,[])
