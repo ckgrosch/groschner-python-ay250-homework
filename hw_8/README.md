@@ -17,3 +17,4 @@ with pytest being able to find the proper files etc. I tried to implement some
 pytest fixtures to fix this but that failed. Sorry! The website worked for me
 though and my most recent testing case gave 89% coverage so WOOO! To run the
 website just call the run.sh file.
+Link to Travis CI: https://travis-ci.org/ckgrosch/groschner-python-ay250-homework
