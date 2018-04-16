@@ -20,18 +20,20 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = set(['bib'])
 DB_NAME = 'uploads/uploaded_citations.db'
 TBL_NAME = 'query_table'
-# conn = sqlite3.connect(DB_NAME)
-# cursor = conn.cursor()
-# cmd1 = """DROP TABLE IF EXISTS {}""".format(TBL_NAME)
-# cursor.execute(cmd1)
-# sql_cmd = """CREATE TABLE {} (id INTEGER PRIMARY KEY AUTOINCREMENT, cit_key TEXT, author_list TEXT, journal TEXT, volume INT, pages TEXT, year INT, title TEXT, collection TEXT)""".format(TBL_NAME)
-# cursor.execute(sql_cmd)
-# conn.commit()
-# conn.close()
+def clear_db():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cmd1 = """DROP TABLE IF EXISTS {}""".format(TBL_NAME)
+    cursor.execute(cmd1)
+    sql_cmd = """CREATE TABLE {} (id INTEGER PRIMARY KEY AUTOINCREMENT, cit_key TEXT, author_list TEXT, journal TEXT, volume INT, pages TEXT, year INT, title TEXT, collection TEXT)""".format(TBL_NAME)
+    cursor.execute(sql_cmd)
+    conn.commit()
+    conn.close()
+clear_db()
 
 
 #function for homepage
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def home_page():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
@@ -50,6 +52,7 @@ def allowed_file(filename):
 
 @app.route('/insert', methods=['GET', 'POST'])
 def upload_file():
+    print(request.files)
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -66,6 +69,7 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             fname = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            print('UPLOAD!!!!', fname, collection_name)
             bib_to_db(fname,collection_name,DB_NAME, TBL_NAME)
             return redirect(url_for('home_page'))
     return render_template('insert.html')
@@ -76,7 +80,7 @@ def upload_file():
 @app.route('/search', methods=['GET', 'POST'])
 def search_stuff():
     col_names = ['Citation Key','Author List','Journal','Volume','Pages','Year','Title','Collection']
-    print(request.method)
+    print(request.form)
     results = []
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
