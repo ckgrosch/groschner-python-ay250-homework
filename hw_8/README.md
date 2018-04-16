@@ -15,4 +15,5 @@ I tried to write the upload test such that I would search the database once the
 upload happened to make sure it was done right but this led to MANY problems
 with pytest being able to find the proper files etc. I tried to implement some
 pytest fixtures to fix this but that failed. Sorry! The website worked for me
-though and my most recent testing case gave 89% coverage so WOOO! 
+though and my most recent testing case gave 89% coverage so WOOO! To run the
+website just call the run.sh file.
