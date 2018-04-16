@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MYBUTTS</title>
+        <title>Bibtex Viewer</title>
     </head>
 
     <body>
-        <h1> BUTTSBUTTSBUTTS </h1>
+        <h1>Welcome to Bibtex Viewer!</h1>
+        <li> <a href="/insert"> Insert a Collection</a> </li>
+        <li> <a href="/search"> Run a Query</a> </li>
+        <p> The current collections present are:
+        {% for clct in collects_present %}
+           <li>clct </li>
+        {% endfor %}
+        </p>
     </body>
 </html>
