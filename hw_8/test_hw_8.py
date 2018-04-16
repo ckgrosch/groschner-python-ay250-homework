@@ -25,7 +25,7 @@ def test_search():
 
 def test_upload():
     clear_db()
-    r = test_app.post('/insert', data={'file': open('hw_8_data/homework_8_refs.bib', 'rb'), 'collection_name': 'test'})
+    r = test_app.post('/insert', data={'file': open('test_refs.bib', 'rb'), 'collection_name': 'test'})
     r.status_code == 302
     r.location == '/'
     conn = sqlite3.connect(DB_NAME)
