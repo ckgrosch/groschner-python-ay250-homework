@@ -55,7 +55,7 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             fname = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             bib_to_db(fname,collection_name,db_name)
-            return redirect(url_for('home_page'))
+            return redirect(url_for('home_page')) 
     return render_template('insert.html')
 # @app.route('/insert', methods=['GET', 'POST'])
 # def insert_stuff():
