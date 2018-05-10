@@ -20,6 +20,7 @@ import seaborn as sns
 from glob import glob
 import shutil
 from ast import literal_eval
+from skimage import transform
 
 DIRECTORY = os.getcwd() + '/rf_data'
 
@@ -191,27 +192,33 @@ def fft_hist(gray_image):
     return fhist
 
 def center_cut(image):
-    """returns a 1d array of length 48 which is 4x4 center of image of all three channels flattened"""
+    """returns a 1d array of length 400 which is 20x20 center of image"""
     middle = (image.shape[0]//2,image.shape[1]//2)
     cut = image[(middle[0]-10):(middle[0]+10),(middle[1]-10):(middle[1]+10)].ravel()
     return cut
 
 def lbp_cut(gray_image):
-    """returns 10 bin histogram of local binary patterns from image"""
+    """returns a 1d array of length 400 which is 20x20 center of lbp of image"""
     lbp = skimage.feature.local_binary_pattern(gray_image,2,16)
     middle = (lbp.shape[0]//2,lbp.shape[1]//2)
     lbp = lbp[(middle[0]-10):(middle[0]+10),(middle[1]-10):(middle[1]+10)].ravel()
     return lbp
 
 def gray_range(image):
+    """gives the mean and standard deviation for the image"""
     irange = np.array([image.mean(),image.std()])
     return irange
 
-def get_features(file, label):
+def get_features(file, label = None):
     """Function takes in a file name from list of files, opens it,
      creates a gray version for features which require gray image and then
      creates a list of features as well as a label which is then returned"""
     image = io.imread(file, as_grey=True)
+    if image.shape[0] < 10 or image.shape[1] <10:
+        transform.resize(image,(15,15))
+        raise RuntimeWarning\
+        ('Had to resize input image {}. \
+        This may change feature results.'.format(file))
     features = []
     features.append(center_cut(image))
     features.append(lbp_cut(image))
@@ -220,13 +227,16 @@ def get_features(file, label):
     features.append(sobel_edges(image))
     features.append(gray_range(image))
     features = np.concatenate(features)
-    return (features,label)
+    if label == None:
+        return features
+    else:
+        return (features,label)
 
 def feature_frame(file_label_df,directory = DIRECTORY):
     """Creates a pandas dataframe with all the calculated features for all the
      images in a given dataframe which contains all the images file names
       and labels."""
-    features = [get_features(file, file_label_df['label'].iloc[idx]) for idx,file in enumerate(file_label_df['filename'])]
+    features = [get_features(file, label = file_label_df['label'].iloc[idx]) for idx,file in enumerate(file_label_df['filename'])]
     print('Done!')
     feat_list, labels_list = zip(*features)
     df = pd.DataFrame.from_records(feat_list)
@@ -322,8 +332,8 @@ def feature_importance(X_train,classifier):
     ax.set_title("Feature Importance vs Feature Class")
 
 def optimize_model(X_train,Y_train, nestimators = [10,20,30,50,70,100]):
-    """function which runs model optimization given a certain number of n_estimators, max_features, and criterion
-    (gini or entropy)"""
+    """function which runs model optimization given a certain number of
+    n_estimators, max_features, and criterion (gini or entropy)"""
     logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s %(levelname)s %(message)s')
     parameters = {'n_estimators':nestimators,  'max_features':[3,8,10,'auto'],
@@ -334,3 +344,22 @@ def optimize_model(X_train,Y_train, nestimators = [10,20,30,50,70,100]):
     print("Best zero-one score: " + str(rf_opt.best_score_) + "\n")
     print("Optimal Model:\n" + str(rf_opt.best_estimator_))
     return rf_opt
+
+def features_unlabeled_data( sub_dir,data_directory=DIRECTORY, fname = None):
+    """Creates features for segmented images that are not part of a labeled
+    training or test set. Returns pandas dataframe of features. Features can
+    be saved to csv by providing string to fname keyword argument"""
+    files = glob(data_directory+sub_dir+'*.png')
+    features = [get_features(file) for file in files]
+    df = pd.DataFrame.from_records(features)
+    column_names = [['center_cut']*400,['lbp_cut']*400,\
+                    ['fft_hist']*20,['blobs_log']*2,\
+                    ['sobel_edges']*50,['mean'],['std']]
+    column_names = sum(column_names, [])
+    df.columns = column_names
+    if fname == None:
+        return df
+    else:
+        name = data_directory + '/' + fname + '.csv'
+        df.to_csv(name)
+        return df
