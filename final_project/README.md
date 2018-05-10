@@ -23,10 +23,11 @@ that were not atomic resolution (labeled 'null'). 'Null' regions are labeled
 such because without atomic resolution the defect content cannot be determined.
 
 The data set consists of several hundred (approx 300) HR-TEM images of quantum
-dots and their labels. These labels were both location of the center of the
-identified particle, the radius of the particle (in pixels), and whether the
-particle was defected ('yes'), not defected ('no'), or indistinguishable
-('null') shown below (yes first, in pink, then no, in blue, finally null,
+dots and their labels, which are in txt files. The information in the label file
+was the location of the center of the identified particle, the radius of the
+particle (in pixels), and whether the particle was defected ('yes'), not
+defected ('no'), or indistinguishable ('null') shown below (yes first, in pink,
+then no, in blue, finally null,
   in orange).
   <p align="center">
     <img src="README_images/np_yes.tif" width="350"/>
@@ -55,8 +56,38 @@ net based on a U-Net structure (discussed here:
   forest so that test functions could be run on them and they are imported into
  the final demo jupyter notebook. All of the work to develop the random forest
  classifier can be found in the jupyter notebook labeled
- Random_Forest_Development.
+ Random_Forest_Development. The model created is saved in the file rf_models as
+ opt_random_forest.pkl. The data used to train the classifier can be found
+ here: https://berkeley.box.com/s/bbvvfz1bh6iab231x3ikv8bvu8uhva8s
 
   ![confusion_matrix](README_images/confusion_matrix.tif)
 
-  Having created a seemingly good structure classifier I then
+  Having created a seemingly good structure classifier I then moved onto trying
+  to solve the segmentation problem. Code by Roma Vasudevan for sliding FFT was
+  used to make an accumulation map of high spatial frequency regions in an
+  image. This code should definitely not be seen as my contribution, the only
+  reason it is given in this repo is because it was the only way to begin
+  segmenting the images. Sliding fft helps me segment the images
+  because it creates blob like regions in accumulation maps of where high
+  spatial frequency regions are. Roma's code is in the file called sfft.py.
+  Once I had an accumulation map of high spatial frequency regions I was then
+  able to use standard image processing methods to segment out particle regions.
+  This is shown in the jupyter notebook called
+  Sliding_FFT_Preprocessing_Development. The functions developed for segmenting
+  based on accumulation maps is given in np_segment.py so that test code can run
+  on them and they could be imported into the demo. This segmentation pipeline
+  worked reasonably well but still gave a large number of regions with
+
+  Finally, I created a demonstration of the complete system, doing the sliding
+  fft based segmentation and then the classification on those images. Since that
+  did not work quite as well as hoped I then tried just a sliding window
+  approach (code for the sliding window is in slid_window.py). I tried this as
+  well on some images to mixed results. Still the goal of this project was to
+  get better than random classification of structures and that was
+  accomplished! More discussion of results can be found in demo.ipynb. The data
+  used for the demo can be found here:
+  https://berkeley.box.com/s/f042q67ifjvs8zmz7v7qmiy6mwkjjflp
+
+  The testing can be run just by calling pytest in the command line.
+
+  Thank you for a great semester! I learned so much!
