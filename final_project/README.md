@@ -29,9 +29,9 @@ particle was defected ('yes'), not defected ('no'), or indistinguishable
 ('null') shown below (yes first, in pink, then no, in blue, finally null,
   in orange).
 
-![yes](/README_images/np_no.png)
-![no](/README_images/np_no.png)
-![null](/README_images/np_null.png)
+![yes](/README_images/np_no.tif)
+![no](/README_images/np_no.tif)
+![null](/README_images/np_null.tif)
 
 My original plan was to try to segment the images using a convolutional neural
 net based on a U-Net structure (discussed here:
@@ -54,8 +54,8 @@ net based on a U-Net structure (discussed here:
   forest so that test functions could be run on them and they are imported into
  the final demo jupyter notebook. All of the work to develop the random forest
  classifier can be found in the jupyter notebook labeled
- Random_Forest_Development. 
+ Random_Forest_Development.
 
-  ![confusion_matrix](/README_images/confusion_matrix.png)
+  ![confusion_matrix](/README_images/confusion_matrix.tif)
 
   Having created a seemingly good structure classifier I then
