@@ -28,8 +28,13 @@ identified particle, the radius of the particle (in pixels), and whether the
 particle was defected ('yes'), not defected ('no'), or indistinguishable
 ('null') shown below (yes first, in pink, then no, in blue, finally null,
   in orange).
+  <p align="center">
+    <img src="README_images/np_yes.tif" width="350"/>
+    <img src="README_images/np_no.tif" width="350"/>
+    <img src="README_images/np_null.tif" width="350"/>
+  </p>
 
-![yes](README_images/np_no.tif)
+![yes](README_images/np_yes.tif)
 ![no](README_images/np_no.tif)
 ![null](README_images/np_null.tif)
 
@@ -56,6 +61,6 @@ net based on a U-Net structure (discussed here:
  classifier can be found in the jupyter notebook labeled
  Random_Forest_Development.
 
-  ![confusion_matrix](/README_images/confusion_matrix.tif)
+  ![confusion_matrix](README_images/confusion_matrix.tif)
 
   Having created a seemingly good structure classifier I then
