@@ -88,6 +88,8 @@ net based on a U-Net structure (discussed here:
   used for the demo can be found here:
   https://berkeley.box.com/s/f042q67ifjvs8zmz7v7qmiy6mwkjjflp
 
-  The testing can be run just by calling pytest in the command line.
+  The testing can be run just by calling pytest in the command line. I used a
+  virtual environment to develop this project and the requirements.txt is in the
+  repo.
 
   Thank you for a great semester! I learned so much!

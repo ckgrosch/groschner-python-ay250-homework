@@ -45,6 +45,7 @@ protobuf==3.5.2.post1
 ptyprocess==0.5.2
 Pygments==2.2.0
 pyparsing==2.2.0
+pysptools==0.14.2
 python-dateutil==2.7.2
 pytz==2018.4
 PyWavelets==0.5.2
