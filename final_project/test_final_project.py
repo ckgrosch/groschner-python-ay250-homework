@@ -3,6 +3,7 @@ import random_forest as rf
 from glob import glob
 import numpy as np
 from skimage import io
+import np_segment as nps
 
 
 print(rf.DIRECTORY)
@@ -73,3 +74,14 @@ def test_get_features():
     features = rf.get_features(df['filename'].iloc[0],df['label'].iloc[0])
     assert features[0].shape[0] == 874
     assert isinstance(features[1],str)
+
+def test_run_sfft():
+    amap = nps.run_sfft(SAMPLE_IMAGE)
+    assert amap.shape[2] == 3
+
+def test_sfft_filter():
+    amap = nps.run_sfft(SAMPLE_IMAGE)
+    bin_image = nps.sfft_filter(amap)
+    assert bin_image.shape == (1024,1024)
+    assert int(bin_image.max()) == 1
+    assert int(bin_image.min()) == 0

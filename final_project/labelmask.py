@@ -45,6 +45,8 @@ def mask_maker(file):
 
 def mask_pipeline(directory):
     file_list = glob(directory+'/text_files/*.txt')
+    if os.path.isdir(directory+'/labels/') == False:
+        os.mkdir(diretory+'/labels/')
     name_list = [name.split('/')[-1].split('.')[0] for name in file_list]
     for idx, file in enumerate(file_list):
         if len(open(file,'r').readlines()) == 0:
@@ -52,5 +54,4 @@ def mask_pipeline(directory):
         else:
             label_mask = mask_maker(file)
             plt.imsave(directory+'/labels/'+name_list[idx]+'.png',label_mask, cmap='gray')
-        shutil.move(file,directory+'/old_text_files/')
     print('done!')
