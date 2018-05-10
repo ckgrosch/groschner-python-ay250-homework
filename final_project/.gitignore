@@ -1,3 +1,9 @@
 venv
 data
 keras tutorial.ipynb
+.DS_Store
+*DS_Store
+.pytest_cache/
+*/hw_6/.DS_Store
+*pytest_cache/
+/rf_data
