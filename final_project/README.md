@@ -1,4 +1,4 @@
-#Pipeline to Classify the Atomic Structure of CdSe Quantum Dots
+# Pipeline to Classify the Atomic Structure of CdSe Quantum Dots
 
 My research looks at the effect of atomic defects in cadmium selenide quantum
 dots on optical properties. Current techniques of classifying nanoparticle
@@ -29,9 +29,9 @@ particle was defected ('yes'), not defected ('no'), or indistinguishable
 ('null') shown below (yes first, in pink, then no, in blue, finally null,
   in orange).
 
-![yes](/README_images/np_no.tif)
-![no](/README_images/np_no.tif)
-![null](/README_images/np_null.tif)
+![yes](README_images/np_no.tif)
+![no](README_images/np_no.tif)
+![null](README_images/np_null.tif)
 
 My original plan was to try to segment the images using a convolutional neural
 net based on a U-Net structure (discussed here:
