@@ -34,10 +34,6 @@ particle was defected ('yes'), not defected ('no'), or indistinguishable
     <img src="README_images/np_null.tif" width="350"/>
   </p>
 
-![yes](README_images/np_yes.tif)
-![no](README_images/np_no.tif)
-![null](README_images/np_null.tif)
-
 My original plan was to try to segment the images using a convolutional neural
 net based on a U-Net structure (discussed here:
   https://link.springer.com/chapter/10.1007%2F978-3-319-24574-4_28). However,
